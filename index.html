@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+    <head>
+
+        <title>CoinMarketCap</title>
+        <link rel="stylesheet" type="text/css" 
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <meta charset="utf-8">
+
+    </head>
+    <body>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page"><h2>Coin Market Cap</h2></li>
+            </ol>
+        </nav>
+
+        <div class="d-flex p3-3 bd-highlight">
+        <div id='coins'></div>
+        </div>
+
+        <script type="text/javascript">
+            //Minha API
+            var apiKey = {
+                key: '6aa01358-a70c-4467-bc37-3fcc413f620d'
+            }
+
+            //Requisição GET Fetch
+            fetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?CMC_PRO_API_KEY=' + apiKey.key)
+            .then((response) => {
+                if(!response.ok) throw new Error('Erro ao executar a requisição, status' + response.status);
+                return response.json();
+            })
+            .then((api) => {
+                var texto = "";
+                //Pegar as 10 primeiras moedas
+                for(let i = 0; i < 10; i++){
+
+                    //Informações da API
+
+                    texto = texto + `
+
+                     <div class="media">
+                        
+                        <img src="coin.jpg" class="align-self-center mr-3 ml-3" alt="coin" width="40%" heigth="60">
+                        <div class="media-body">
+                            <h5 class="mt-2 ">${api.data[i].name}</h5>
+                            <p>${api.data[i].symbol}</p>
+                            <p>Primeira data Histórica: ${api.data[i].first_historical_data}</p>
+                            <p>Ultima data: ${api.data[i].last_historical_data} </p>
+                        </div> 
+                     </div>
+                    `;
+
+                    document.getElementById("coins").innerHTML = texto;
+
+                }
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
+        </script>
+    </body>
+</html>
